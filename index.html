@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation App</title>
+</head>
+
+<body>
+
+    <h1>English to Spanish Translator</h1>
+
+    <div>
+        <label for="inputText">Enter English Text:</label>
+        <textarea id="inputText" rows="4" cols="50"></textarea>
+    </div>
+
+    <button onclick="translateText()">Translate</button>
+
+    <div>
+        <label for="outputText">Spanish Translation:</label>
+        <textarea id="outputText" rows="4" cols="50" readonly></textarea>
+    </div>
+
+    <script>
+        function translateText() {
+            // Get the input text from the textarea
+            var inputText = document.getElementById("inputText").value;
+            const translationEndPoint = "http://127.0.0.1:5000/translate"
+            // Make a request to the translation API
+            fetch(translationEndPoint, {
+                method: "POST",
+                header: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: inputText })
+            })
+                .then(response => response.json())
+                .then(response => {
+                    console.log("Response from API:", response);
+                    var translatedText = response.data;
+                    document.getElementById("outputText").value = translatedText;
+                })
+                .catch(error => {
+                    console.error("Error translating text:", error);
+                });
+        }
+    </script>
+
+</body>
+
+</html>
